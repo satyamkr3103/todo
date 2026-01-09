@@ -22,7 +22,7 @@ class Todo(db.Model):
 
 with app.app_context():
     db.create_all()
-    
+
 @app.route('/', methods =['GET','POST'])
 def hello_world():
     if request.method=='POST':
@@ -37,6 +37,9 @@ def hello_world():
     allTodo = Todo.query.all()
     return render_template('index.html',allTodo=allTodo)
     # return 'hello,world!'
+@app.route("/health")
+def health():
+    return "Healthy"
 
 @app.route('/show')
 def products():
