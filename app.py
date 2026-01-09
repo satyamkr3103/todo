@@ -5,9 +5,10 @@ from datetime import datetime
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///todo.db"
-app.config['SQLALCHEMY_TRACKBACK_MODIFICATION'] = False
+app = Flask(__name__,template_folder=os.path.join(BASE_DIR,"templates"))
+app.config['SQLALCHEMY_DATABASE_URI']=f"sqlite:///{os.path.join(BASE_DIR,'todo.db')}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY","fallback-secret")
 db = SQLAlchemy(app)
 
 class Todo(db.Model):
@@ -16,9 +17,12 @@ class Todo(db.Model):
     desc = db.Column(db.String(500),nullable = False)
     date_created = db.Column(db.DateTime,default = datetime.utcnow)
 
-def __repr__(self) -> str:
-    return f"{self.sno} - {self.title}"
+    def __repr__(self) -> str:
+        return f"{self.sno} - {self.title}"
 
+with app.app_context():
+    db.create_all()
+    
 @app.route('/', methods =['GET','POST'])
 def hello_world():
     if request.method=='POST':
@@ -43,6 +47,10 @@ def products():
 @app.route('/delete<int:sno>')
 def delete(sno):
     todo = Todo.query.filter_by(sno=sno).first()
+
+    if not todo:
+        return redirect('/')
+    
     db.session.delete(todo)
     db.session.commit()
     return redirect('/')
@@ -63,7 +71,10 @@ def update(sno):
     
     return render_template('update.html',todo=todo)
 
-if __name__=="__main__":
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template("500.html"), 500
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template("404.html"), 404
