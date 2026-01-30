@@ -1,0 +1,29 @@
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.btn {
+    border-radius: 20px;
+}
+
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+textarea {
+    resize: none;
+}
+
+.card, table {
+    animation: fadeIn 0.4s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

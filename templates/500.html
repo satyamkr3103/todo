@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Server Error</title>
-</head>
-<body>
-    <h1>500</h1>
+{% extends "base.html" %}
+{% block title %}500{% endblock %}
+{% block content %}
+<div class="text-center">
+    <h1>💥 500</h1>
     <p>Something went wrong</p>
-    <a href="/">GO Home</a>
-</body>
-</html>
+    <a href="/" class="btn btn-danger">Back to safety</a>
+</div>
+{% endblock %}

@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Page Not Found</title>
-</head>
-<body>
-    <h1>404</h1>
+{% extends "base.html" %}
+{% block title %}404{% endblock %}
+{% block content %}
+<div class="text-center">
+    <h1>😕 404</h1>
     <p>Page not found</p>
-    <a href="/">Go Home</a>
-</body>
-</html>
+    <a href="/" class="btn btn-primary">Go Home</a>
+</div>
+{% endblock %}
