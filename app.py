@@ -2,7 +2,7 @@ import os
 from flask import Flask , render_template , request ,redirect # type: ignore
 from flask_sqlalchemy import SQLAlchemy # pyright: ignore[reportMissingImports]
 from datetime import datetime
-from sqlalchemy import or_
+from sqlalchemy import or_ # type: ignore
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__,template_folder=os.path.join(BASE_DIR,"templates"))
@@ -15,6 +15,7 @@ class Todo(db.Model):
     sno = db.Column(db.Integer,primary_key = True)
     title = db.Column(db.String(200),nullable = False)
     desc = db.Column(db.String(500),nullable = False)
+    completed = db.Column(db.Boolean,default=False)
     date_created = db.Column(db.DateTime,default = datetime.utcnow)
 
     def __repr__(self) -> str:
@@ -60,6 +61,14 @@ def delete(sno):
     db.session.delete(todo)
     db.session.commit()
     return redirect('/')
+
+@app.route("/toggle/<int:sno>")
+def toggle(sno):
+    todo = Todo.query.filter_by(sno=sno).first()
+    if todo:
+        todo.completed = not todo.completed
+        db.session.commit()
+    return redirect("/")
 
 @app.route('/update/<int:sno>',methods=['GET','POST'])
 def update(sno):
