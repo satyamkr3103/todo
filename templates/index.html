@@ -31,15 +31,17 @@
 </form>
 
 {% if allTodo|length == 0 %}
-<p class="text-muted text-center">
-  {% if search %}
-  No results found for "<strong>{{ search }}</strong>" 😕
-  {% else %}
+  <p class="text-muted text-center">
+    {% if search %}
+      No results found for "<strong>{{ search }}</strong>" 😕
+    {% else %}
+      No todos yet 👀
+    {% endif %}
+{% else %}
   No todos yet 👀
-  {% endif %}
+{% endif %}
+
 </p>
-<!-- <p class="text-muted text-center">No todos yet 👀</p>
-{% else %} -->
 <table class="table table-bordered table-hover bg-white shadow-sm">
   <thead class="table-dark">
     <tr>

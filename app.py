@@ -38,10 +38,9 @@ def hello_world():
     search = request.args.get("search","")
 
     if search:
-        allTodo = Todo.query.filter(or_(Todo.title.ilike(f"%{search}%")),Todo.desc.ilike(f"%{search}%")).all()
+        allTodo = Todo.query.filter(or_(Todo.title.ilike(f"%{search}%"),Todo.desc.ilike(f"%{search}%"))).all()
     else:
         allTodo = Todo.query.all()
-    allTodo = Todo.query.all()
     return render_template('index.html',allTodo=allTodo,search=search)
     # return 'hello,world!'
 
