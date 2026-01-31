@@ -24,51 +24,62 @@ class Todo(db.Model):
 with app.app_context():
     db.create_all()
 
-@app.route('/', methods =['GET','POST'])
+@app.route('/', methods=['GET', 'POST'])
 def hello_world():
-    if request.method=='POST':
+    if request.method == 'POST':
         title = request.form.get('title')
         desc = request.form.get('desc')
 
         if title and desc:
-            todo = Todo(title=title,desc = desc) # type: ignore
+            todo = Todo(title=title, desc=desc) # type: ignore
             db.session.add(todo)
             db.session.commit()
             return redirect("/")
-    search = request.args.get("search","")
+
+    search = request.args.get("search", "").strip()
 
     if search:
-        allTodo = Todo.query.filter(or_(Todo.title.ilike(f"%{search}%"),Todo.desc.ilike(f"%{search}%"))).all()
-    else:
-        allTodo = Todo.query.all()
-    return render_template('index.html',allTodo=allTodo,search=search)
-    # return 'hello,world!'
-
-@app.route("/search")
-def live_search():
-    query = request.args.get("q", "")
-
-    if query:
-        todos = Todo.query.filter(
+        allTodo = Todo.query.filter(
             or_(
-                Todo.title.ilike(f"%{query}%"),
-                Todo.desc.ilike(f"%{query}%")
+                Todo.title.ilike(f"%{search}%"),
+                Todo.desc.ilike(f"%{search}%")
             )
         ).all()
     else:
-        todos = Todo.query.all()
+        allTodo = Todo.query.all()
 
-    return {
-        "results": [
-            {
-                "sno": t.sno,
-                "title": t.title,
-                "desc": t.desc,
-                "completed": t.completed
-            }
-            for t in todos
-        ]
-    }
+    return render_template(
+        'index.html',
+        allTodo=allTodo,
+        search=search
+    )
+from flask import jsonify
+
+@app.route("/search")
+def search_api():
+    q = request.args.get("q", "").strip()
+
+    if not q:
+        return jsonify(results=[])
+
+    todos = Todo.query.filter(
+        or_(
+            Todo.title.ilike(f"%{q}%"),
+            Todo.desc.ilike(f"%{q}%")
+        )
+    ).all()
+
+    results = []
+    for todo in todos:
+        results.append({
+            "sno": todo.sno,
+            "title": todo.title,
+            "desc": todo.desc,
+            "completed": todo.completed
+        })
+
+    return jsonify(results=results)
+
 
 @app.route('/show')
 def products():
