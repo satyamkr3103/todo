@@ -68,3 +68,10 @@ body.dark-mode .btn-outline-light:hover {
     background-color: #ccc;
     color: #000;
 }
+.input-group input {
+    border-radius: 20px 0 0 20px;
+}
+
+.input-group button {
+    border-radius: 0 20px 20px 0;
+}

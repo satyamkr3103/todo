@@ -21,7 +21,23 @@
   </div>
 </div>
 
+<form method="GET" class="mb-3">
+  <div class="input-group">
+    <input type="text" name="search" class="form-control" placeholder="Search todos..." value="{{ search }}">
+    <button class="btn btn-outline-secondary" type="submit">
+      🔍 Search
+    </button>
+  </div>
+</form>
+
 {% if allTodo|length == 0 %}
+<p class="text-muted text-center">
+  {% if search %}
+  No results found for "<strong>{{ search }}</strong>" 😕
+  {% else %}
+  No todos yet 👀
+  {% endif %}
+</p>
 <p class="text-muted text-center">No todos yet 👀</p>
 {% else %}
 <table class="table table-bordered table-hover bg-white shadow-sm">
