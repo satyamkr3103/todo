@@ -44,6 +44,32 @@ def hello_world():
     return render_template('index.html',allTodo=allTodo,search=search)
     # return 'hello,world!'
 
+@app.route("/search")
+def live_search():
+    query = request.args.get("q", "")
+
+    if query:
+        todos = Todo.query.filter(
+            or_(
+                Todo.title.ilike(f"%{query}%"),
+                Todo.desc.ilike(f"%{query}%")
+            )
+        ).all()
+    else:
+        todos = Todo.query.all()
+
+    return {
+        "results": [
+            {
+                "sno": t.sno,
+                "title": t.title,
+                "desc": t.desc,
+                "completed": t.completed
+            }
+            for t in todos
+        ]
+    }
+
 @app.route('/show')
 def products():
     allTodo = Todo.query.all()
