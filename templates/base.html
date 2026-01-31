@@ -1,26 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Yoink Todo{% endblock %}</title>
+  <meta charset="UTF-8">
+  <title>{% block title %}Yoink Todo{% endblock %}</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body class="bg-light">
 
-<nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container">
-        <span class="navbar-brand">📝 Yoink Todo</span>
-    </div>
-</nav>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container d-flex justify-content-between">
+      <span class="navbar-brand">📝 Yoink Todo</span>
 
-<div class="container">
+      <button id="themeToggle" class="btn btn-outline-light btn-sm">
+        🌙 Dark
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
     {% block content %}{% endblock %}
-</div>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById("themeToggle");
+    const body = document.body;
+
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+      body.classList.add("dark-mode");
+      toggleBtn.innerText = "☀️ Light";
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      body.classList.toggle("dark-mode");
+
+      if (body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+        toggleBtn.innerText = "☀️ Light";
+      } else {
+        localStorage.setItem("theme", "light");
+        toggleBtn.innerText = "🌙 Dark";
+      }
+    });
+  </script>
 
 </body>
+
 </html>
