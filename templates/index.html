@@ -56,11 +56,14 @@
     <td>{{ todo.title }}</td>
     <td>{{ todo.desc }}</td>
     <td>
+      <a href="/toggle/{{todo.sno}}"
+      class="btn btn-sm {% if todo.completed %}btn-secondary{% else %}btn-success{% endif %}">
       {% if todo.completed %}
-        <span class="badge bg-success">Completed</span>
+        <span class="badge bg-success">Make Pending</span>
       {% else %}
-        <span class="badge bg-warning text-dark">Pending</span>
+        <span class="badge bg-warning text-dark">Mark Complete</span>
       {% endif %}
+      </a>
     </td>
     <td>
       <a href="/update/{{ todo.sno }}" class="btn btn-sm btn-warning">Edit</a>

@@ -53,7 +53,7 @@ def hello_world():
         allTodo=allTodo,
         search=search
     )
-from flask import jsonify
+from flask import jsonify   # type: ignore
 
 @app.route("/search")
 def search_api():
